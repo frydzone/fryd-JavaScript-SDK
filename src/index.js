@@ -3,6 +3,7 @@ const request = require('request');
 const burst = 20;
 const fill = 10;
 const { TokenBucket } = require('limiter');
+
 const bucket = new TokenBucket(burst, fill, 'second', null);
 
 const baseUri = 'https://api.fryd.zone';
@@ -19,13 +20,13 @@ module.exports = {
             trophylist_id: id,
           }),
         }, (err, res, data) => {
-          if (!err && res.statusCode == 200) {
+          if (!err && res.statusCode === 200) {
             if (typeof data === 'string') {
               data = JSON.parse(data);
             }
             resolve(data.response.trophys);
           } else {
-            reject(err);
+            reject(err || `${res.statusCode} ${res.statusMessage}`);
           }
         });
       });
@@ -42,13 +43,13 @@ module.exports = {
             location_id: id,
           }),
         }, (err, res, data) => {
-          if (!err && res.statusCode == 200) {
+          if (!err && res.statusCode === 200) {
             if (typeof data === 'string') {
               data = JSON.parse(data);
             }
             resolve(data.response.trophylists);
           } else {
-            reject(err);
+            reject(err || `${res.statusCode} ${res.statusMessage}`);
           }
         });
       });
@@ -65,13 +66,13 @@ module.exports = {
             location_id: id,
           }),
         }, (err, res, data) => {
-          if (!err && res.statusCode == 200) {
+          if (!err && res.statusCode === 200) {
             if (typeof data === 'string') {
               data = JSON.parse(data);
             }
             resolve(data.response);
           } else {
-            reject(err);
+            reject(err || `${res.statusCode} ${res.statusMessage}`);
           }
         });
       });
@@ -88,13 +89,13 @@ module.exports = {
             trophy_id: id,
           }),
         }, (err, res, data) => {
-          if (!err && res.statusCode == 200) {
+          if (!err && res.statusCode === 200) {
             if (typeof data === 'string') {
               data = JSON.parse(data);
             }
             resolve(data.response);
           } else {
-            reject(err);
+            reject(err || `${res.statusCode} ${res.statusMessage}`);
           }
         });
       });
@@ -110,13 +111,13 @@ module.exports = {
             token,
           }),
         }, (err, res, data) => {
-          if (!err && res.statusCode == 200) {
+          if (!err && res.statusCode === 200) {
             if (typeof data === 'string') {
               data = JSON.parse(data);
             }
             resolve(data.response);
           } else {
-            reject(err);
+            reject(err || `${res.statusCode} ${res.statusMessage}`);
           }
         });
       });
@@ -132,13 +133,13 @@ module.exports = {
             token,
           }),
         }, (err, res, data) => {
-          if (!err && res.statusCode == 200) {
+          if (!err && res.statusCode === 200) {
             if (typeof data === 'string') {
               data = JSON.parse(data);
             }
             resolve(data.response);
           } else {
-            reject(err);
+            reject(err || `${res.statusCode} ${res.statusMessage}`);
           }
         });
       });
@@ -157,10 +158,10 @@ module.exports = {
             secret,
           }),
         }, (err, res) => {
-          if (!err && res.statusCode == 204) {
+          if (!err && res.statusCode === 204) {
             resolve('Success successfully posted');
           } else {
-            reject(err);
+            reject(err || `${res.statusCode} ${res.statusMessage}`);
           }
         });
       });
@@ -174,13 +175,13 @@ module.exports = {
           method: 'POST',
           form: `grant_type=client_credentials&client_id=${clientId}&client_secret=${clientSecret}&state=${state}`,
         }, (err, res, data) => {
-          if (!err && res.statusCode == 200) {
+          if (!err && res.statusCode === 200) {
             if (typeof data === 'string') {
               data = JSON.parse(data);
             }
-            resolve(data.access_token);
+            resolve(data);
           } else {
-            reject(err);
+            reject(err || `${res.statusCode} ${res.statusMessage}`);
           }
         });
       });
@@ -194,13 +195,13 @@ module.exports = {
           method: 'POST',
           form: `grant_type=authorization_code&code=${code}&redirect_uri=${redUri}&client_id=${clientId}&client_secret=${clientSecret}&state=${state}`,
         }, (err, res, data) => {
-          if (!err && res.statusCode == 200) {
+          if (!err && res.statusCode === 200) {
             if (typeof data === 'string') {
               data = JSON.parse(data);
             }
             resolve(data);
           } else {
-            reject(err);
+            reject(err || `${res.statusCode} ${res.statusMessage}`);
           }
         });
       });
@@ -220,7 +221,7 @@ module.exports = {
             }
             resolve(data);
           } else {
-            reject(err);
+            reject(err || `${res.statusCode} ${res.statusMessage}`);
           }
         });
       });
