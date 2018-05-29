@@ -149,7 +149,7 @@ module.exports = {
     return new Promise(((resolve, reject) => {
       bucket.removeTokens(1, () => {
         request({
-          url: `${baseUri}/api/trophy/check`,
+          url: `${baseUri}/api/trophycheck`,
           method: 'POST',
           body: JSON.stringify({
             user_token: userToken,
