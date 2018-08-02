@@ -1,17 +1,18 @@
-const request = require('request');
+const request = require('request');          // Handles http requests
+const { TokenBucket } = require('limiter');  // Handles the limitations of the fryd API
 
-const burst = 20;
-const fill = 10;
-const { TokenBucket } = require('limiter');
+const baseUri = 'https://api.fryd.zone';     // Endpoint for all fryd requests
 
-const bucket = new TokenBucket(burst, fill, 'second', null);
+module.exports = class Fryd {
+  constructor(burst, fill) {
+    this.burst = burst || 20;
+    this.fill = fill || 10;
+    this.bucket = new TokenBucket(burst, fill, 'second', null);
+  }
 
-const baseUri = 'https://api.fryd.zone';
-
-module.exports = {
-  getTrophyList(token, id) {
+  getTrophiesFromList(token, id) {
     return new Promise(((resolve, reject) => {
-      bucket.removeTokens(1, () => {
+      this.bucket.removeTokens(1, () => {
         request({
           url: `${baseUri}/api/trophies`,
           method: 'POST',
@@ -24,17 +25,18 @@ module.exports = {
             if (typeof data === 'string') {
               data = JSON.parse(data);
             }
-            resolve(data.response.trophys);
+            resolve(data);
           } else {
             reject(err || `${res.statusCode} ${res.statusMessage}`);
           }
         });
       });
     }));
-  },
+  }
+
   getTrophyLists(token, id) {
     return new Promise(((resolve, reject) => {
-      bucket.removeTokens(1, () => {
+      this.bucket.removeTokens(1, () => {
         request({
           url: `${baseUri}/api/trophylists`,
           method: 'POST',
@@ -47,17 +49,18 @@ module.exports = {
             if (typeof data === 'string') {
               data = JSON.parse(data);
             }
-            resolve(data.response.trophylists);
+            resolve(data);
           } else {
             reject(err || `${res.statusCode} ${res.statusMessage}`);
           }
         });
       });
     }));
-  },
+  }
+
   getLocationInfo(token, id) {
     return new Promise(((resolve, reject) => {
-      bucket.removeTokens(1, () => {
+      this.bucket.removeTokens(1, () => {
         request({
           url: `${baseUri}/api/location`,
           method: 'POST',
@@ -70,17 +73,18 @@ module.exports = {
             if (typeof data === 'string') {
               data = JSON.parse(data);
             }
-            resolve(data.response);
+            resolve(data);
           } else {
             reject(err || `${res.statusCode} ${res.statusMessage}`);
           }
         });
       });
     }));
-  },
+  }
+
   getTrophyInfo(token, id) {
     return new Promise(((resolve, reject) => {
-      bucket.removeTokens(1, () => {
+      this.bucket.removeTokens(1, () => {
         request({
           url: `${baseUri}/api/trophy`,
           method: 'POST',
@@ -93,17 +97,18 @@ module.exports = {
             if (typeof data === 'string') {
               data = JSON.parse(data);
             }
-            resolve(data.response);
+            resolve(data);
           } else {
             reject(err || `${res.statusCode} ${res.statusMessage}`);
           }
         });
       });
     }));
-  },
+  }
+
   getAllUserTrophies(token) {
     return new Promise(((resolve, reject) => {
-      bucket.removeTokens(1, () => {
+      this.bucket.removeTokens(1, () => {
         request({
           url: `${baseUri}/api/user/trophies`,
           method: 'POST',
@@ -115,17 +120,18 @@ module.exports = {
             if (typeof data === 'string') {
               data = JSON.parse(data);
             }
-            resolve(data.response);
+            resolve(data);
           } else {
             reject(err || `${res.statusCode} ${res.statusMessage}`);
           }
         });
       });
     }));
-  },
+  }
+
   getUserInfo(token) {
     return new Promise(((resolve, reject) => {
-      bucket.removeTokens(1, () => {
+      this.bucket.removeTokens(1, () => {
         request({
           url: `${baseUri}/api/user`,
           method: 'POST',
@@ -137,17 +143,18 @@ module.exports = {
             if (typeof data === 'string') {
               data = JSON.parse(data);
             }
-            resolve(data.response);
+            resolve(data);
           } else {
             reject(err || `${res.statusCode} ${res.statusMessage}`);
           }
         });
       });
     }));
-  },
+  }
+
   postTrophySuccess(userToken, appToken, location, secret) {
     return new Promise(((resolve, reject) => {
-      bucket.removeTokens(1, () => {
+      this.bucket.removeTokens(1, () => {
         request({
           url: `${baseUri}/api/trophycheck`,
           method: 'POST',
@@ -166,10 +173,11 @@ module.exports = {
         });
       });
     }));
-  },
+  }
+
   getTokenFromClientCred(clientId, clientSecret, state) {
     return new Promise(((resolve, reject) => {
-      bucket.removeTokens(1, () => {
+      this.bucket.removeTokens(1, () => {
         request({
           url: `${baseUri}/auth/token`,
           method: 'POST',
@@ -186,10 +194,11 @@ module.exports = {
         });
       });
     }));
-  },
+  }
+
   getTokenFromCode(code, redUri, clientId, clientSecret, state) {
     return new Promise(((resolve, reject) => {
-      bucket.removeTokens(1, () => {
+      this.bucket.removeTokens(1, () => {
         request({
           url: `${baseUri}/auth/token`,
           method: 'POST',
@@ -206,10 +215,11 @@ module.exports = {
         });
       });
     }));
-  },
+  }
+
   getTokenFromCodeRefreshToken(refreshToken, clientId, clientSecret, state) {
     return new Promise(((resolve, reject) => {
-      bucket.removeTokens(1, () => {
+      this.bucket.removeTokens(1, () => {
         request({
           url: `${baseUri}/auth/token`,
           method: 'POST',
@@ -226,5 +236,5 @@ module.exports = {
         });
       });
     }));
-  },
+  }
 };
