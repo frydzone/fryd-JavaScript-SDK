@@ -80,6 +80,6 @@ Use to request an access token from client credentials that you can find in the 
 
 You get a code from the first OAuth2 callback if you need access to a user method For example for authentification with Fryd directly from your application). With that code and a redirection url you can call this method to be granted an access token and refresh token.
 
-####getTokenFromCodeRefreshToken(refreshToken, clientId, clientSecret, state)
+#### getTokenFromCodeRefreshToken(refreshToken, clientId, clientSecret, state)
 
 Get a new access token from a refresh token. Access token expire after 24h and refresh token expire after 72h.
