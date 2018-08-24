@@ -42,7 +42,7 @@ Returns all trophies provided a valid trophy list id.
 
 #### getTrophyLists(appToken, id)
 
-Returns all tropy lists provided a valid location id.
+Returns all trophy lists provided a valid location id.
 
 #### getLocationInfo(appToken, id)
 
@@ -78,7 +78,7 @@ Use to request an access token from client credentials that you can find in the 
 
 #### getTokenFromCode(code, redUri, clientId, clientSecret, state)
 
-You get a code from the first OAuth2 callback if you need access to a user method For example for authentification with Fryd directly from your application). With that code and a redirection url you can call this method to be granted an access token and refresh token.
+You get a code from the first OAuth2 callback if you need access to a user method (For example for authentification with Fryd directly from your application). With that code and a redirection url you can call this method to be granted an access token and refresh token.
 
 #### getTokenFromCodeRefreshToken(refreshToken, clientId, clientSecret, state)
 
